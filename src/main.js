@@ -1,5 +1,6 @@
 import SimpleLightbox from 'simplelightbox';
 import iziToast from 'izitoast';
+import icon from './img/toast-icon.svg';
 
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import 'izitoast/dist/css/iziToast.min.css';
@@ -62,7 +63,7 @@ async function onSearchFormSubmit(e) {
       position: 'center',
       messageColor: 'red',
       message: message,
-      iconUrl: './img/toast-icon.svg',
+      iconUrl: icon,
     });
   }
 
@@ -122,7 +123,7 @@ async function onLoadMoreClick() {
       position: 'center',
       messageColor: 'red',
       message: message,
-      iconUrl: './img/toast-icon.svg',
+      iconUrl: icon,
     });
   }
 
