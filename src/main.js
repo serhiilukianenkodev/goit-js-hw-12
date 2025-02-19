@@ -62,7 +62,7 @@ async function onSearchFormSubmit(e) {
       position: 'center',
       messageColor: 'red',
       message: message,
-      iconUrl: './img/toast-icon.svg',
+      iconUrl: 'img/toast-icon.svg',
     });
   }
 
@@ -122,7 +122,7 @@ async function onLoadMoreClick() {
       position: 'center',
       messageColor: 'red',
       message: message,
-      iconUrl: './img/toast-icon.svg',
+      iconUrl: '/img/toast-icon.svg',
     });
   }
 
