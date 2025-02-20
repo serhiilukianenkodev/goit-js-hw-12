@@ -15,7 +15,7 @@ function createCard(item) {
   return `        
         <li class = "gallery-card">
           <a href="${largeImageURL}">
-            <img src="${webformatURL}" alt="${tags}" width="360" height="200" class = "card-img" />
+            <img src="${webformatURL}" alt="${tags}" class = "card-img" />
             <ul class = "card-stats">
               <li class = "card-stat">
                 <p>Likes</p>

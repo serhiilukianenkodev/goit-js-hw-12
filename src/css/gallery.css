@@ -1,16 +1,19 @@
 .gallery {
   display: flex;
   flex-wrap: wrap;
-
+  justify-content: center;
+  align-items: center;
   gap: 24px;
 }
 
 .gallery-card {
-  width: 360px;
+  border: 1px solid #808080;
 }
 
-.gallery-card a {
-  /* display: block; */
+.card-img {
+  width: 360px;
+  height: 160px;
+  object-fit: cover;
 }
 
 .card-stats {
@@ -21,4 +24,9 @@
 
 .card-stat p {
   font-weight: bold;
+}
+
+.load-more-btn {
+  margin: 24px auto;
+  display: block;
 }

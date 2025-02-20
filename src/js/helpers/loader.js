@@ -1,9 +1,9 @@
 const loader = document.querySelector('.loader');
 
 export function showLoader() {
-  loader.classList.remove('hide');
+  loader.classList.remove('hidden');
 }
 
 export function hideLoader() {
-  loader.classList.add('hide');
+  loader.classList.add('hidden');
 }

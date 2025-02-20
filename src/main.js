@@ -8,6 +8,8 @@ import 'izitoast/dist/css/iziToast.min.css';
 import { FetchImages } from './js/pixabey-api';
 import { createGallery } from './js/render-functions';
 import { hideLoader, showLoader } from './js/helpers/loader';
+import { hideLoadMore, showLoadMore } from './js/helpers/loadMore';
+import { smoothScroll } from './js/helpers/smoothScroll';
 
 const refs = {
   form: document.querySelector('.js-form'),
@@ -27,10 +29,13 @@ const options = {
 const fetchImages = new FetchImages();
 const gallery = new SimpleLightbox('.gallery a', options);
 
-async function onSearchFormSubmit(e) {
+function onSearchFormSubmit(e) {
   e.preventDefault();
 
   const query = e.target.elements.query.value.trim();
+
+  refs.galleryList.innerHTML = '';
+
   const isQueryEmpty = !query;
   if (isQueryEmpty)
     return iziToast.warning({
@@ -38,17 +43,26 @@ async function onSearchFormSubmit(e) {
       message: 'Your query is empty',
     });
 
+  fetchImages.setQuery(query);
   refs.galleryList.innerHTML = '';
+
+  loadData();
+
+  e.target.reset();
+}
+
+function onLoadMoreClick() {
+  fetchImages.setNextPage();
+
+  loadData();
+}
+
+async function loadData() {
   showLoader();
-  //
+  hideLoadMore();
 
   try {
-    fetchImages.setQuery(query);
     const data = await fetchImages.getData();
-    // const canLoadMore = data
-
-    console.log(data);
-
     if (data.hits.length === 0) {
       throw new Error(
         'Sorry, there are no images matching your search query. Please try again!'
@@ -56,68 +70,23 @@ async function onSearchFormSubmit(e) {
     }
 
     const items = await data.hits;
-    refs.galleryList.innerHTML = createGallery(items);
-    gallery.refresh();
-  } catch ({ message }) {
-    iziToast.error({
-      position: 'center',
-      messageColor: 'red',
-      message: message,
-      iconUrl: icon,
-    });
-  }
-
-  hideLoader();
-
-  //
-
-  // getPhotos(query)
-  //   .then(({ data }) => {
-  //     if (data.hits.length === 0) {
-  //       throw new Error(
-  //         'Sorry, there are no images matching your search query. Please try again!'
-  //       );
-  //     }
-
-  //     return data.hits;
-  //   })
-  //   .then(items => {
-  //     refs.galleryList.innerHTML = createGallery(items);
-  //     gallery.refresh();
-  //   })
-  //   .catch(({ message }) => {
-  //     iziToast.error({
-  //       position: 'center',
-  //       messageColor: 'red',
-  //       message: message,
-  //     });
-  //   })
-  //   .finally(() => hideLoader());
-
-  e.target.reset();
-}
-
-async function onLoadMoreClick() {
-  fetchImages.setNextPage();
-
-  showLoader();
-  // hide btn
-
-  try {
-    const data = await fetchImages.getData();
-    // const canLoadMore = data
-
-    console.log(data);
-
-    // if (data.hits.length === 0) {
-    //   throw new Error(
-    //     'Sorry, there are no images matching your search query. Please try again!'
-    //   );
-    // }
-
-    const items = await data.hits;
     refs.galleryList.insertAdjacentHTML('beforeend', createGallery(items));
     gallery.refresh();
+
+    if (fetchImages.page !== 1) {
+      smoothScroll(refs.galleryList.lastElementChild);
+    }
+
+    const canLoadMore = fetchImages.page * fetchImages.perPage < data.totalHits;
+
+    if (canLoadMore) {
+      showLoadMore();
+    } else {
+      iziToast.info({
+        position: 'center',
+        message: "We're sorry, but you've reached the end of search results.",
+      });
+    }
   } catch ({ message }) {
     iziToast.error({
       position: 'center',
