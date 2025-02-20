@@ -37,11 +37,13 @@ function onSearchFormSubmit(e) {
   refs.galleryList.innerHTML = '';
 
   const isQueryEmpty = !query;
-  if (isQueryEmpty)
+  if (isQueryEmpty) {
+    hideLoadMore();
     return iziToast.warning({
       position: 'center',
       message: 'Your query is empty',
     });
+  }
 
   fetchImages.setQuery(query);
   refs.galleryList.innerHTML = '';
